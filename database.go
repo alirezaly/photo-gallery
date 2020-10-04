@@ -90,14 +90,14 @@ func seedDB(db *bolt.DB) error {
 }
 
 func listPhotos(db *bolt.DB, bucket string) ([]*Photo, error) {
-       var photos []*Photo
-       db.View(func(tx *bolt.Tx) error {
-               c := tx.Bucket([]byte(bucket)).Cursor()
-               for k, v := c.First(); k != nil; k, v = c.Next() {
-                       photo, _ := decode(v)
-                       photos = append(photos, photo)
-               }
-               return nil
-       })
-       return photos, nil
+	var photos []*Photo
+	db.View(func(tx *bolt.Tx) error {
+		c := tx.Bucket([]byte(bucket)).Cursor()
+		for k, v := c.First(); k != nil; k, v = c.Next() {
+			photo, _ := decode(v)
+			photos = append(photos, photo)
+		}
+		return nil
+	})
+	return photos, nil
 }

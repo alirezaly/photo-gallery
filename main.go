@@ -24,7 +24,7 @@ func main() {
 	e.Renderer = t
 	e.GET("/", root(db))
 	e.GET("/like", like(db))
-	e.Static("/src", "public")
+	e.Static("/assets", "public/assets")
 	e.Logger.Fatal(e.Start(":1323"))
 
 }
