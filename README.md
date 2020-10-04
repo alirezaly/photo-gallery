@@ -28,3 +28,4 @@ run `make build` to run the application as a binary or `make run` to temporarly 
 # How it works?
 This application provides a kind of simple old-school monolith with that provides server-side rendering
 from Echo framework and updating the view usign jQuery after successfull AJAX calls.
+![arch](arch.png)
