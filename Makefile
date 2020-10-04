@@ -1,5 +1,6 @@
 default:
 	go mod tidy
-	go run main.go
+	go build
+	./photo-gallery
 clean:
 	rm -rf *.db
