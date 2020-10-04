@@ -182,24 +182,37 @@ figure.card figcaption .links a::after {
 .liked-true {
 	color: tomato !important;
 }
+
+.pointer {
+	cursor: pointer !important;
+}
 </style>
 
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script>
+	function like(target) {
+		$.get("http://localhost:1323/like", { id: $(target).data("id") }).done(function(data) {
+			$("body").html(data);
+		})
+	}
+</script>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
 
 <div class="container">
 	{{ range $link := .}} 
-	<figure id="{{.ID}}" class="card card--1" style="--image-src: url('https://source.unsplash.com/{{.ID}}')">
+	<figure class="card card--1" style="--image-src: url('https://source.unsplash.com/{{.ID}}')">
         <figcaption>
             <span class="info">
 		    <h3>{{ printf "%.20s" .AltDescription}}</h3>
 		<span>by {{.User.Name}}</span>
             </span>
             <span class="links">
-		<a href="http://localhost:1323/like?id={{.ID}}"><i class="fas fa-heart liked-{{.Liked}}"></i></a>
+		<a data-id="{{.ID}}" class="pointer" onclick="like(this)"><i class="fas fa-heart liked-{{.Liked}}"></i></a>
 		<a href="https://unsplash.com/photos/{{.ID}}" target="_blank"><i class="fas fa-share"></i></a>
             </span>
         </figcaption>
     </figure>
     {{ end }}
 </div>
+
 {{end}}

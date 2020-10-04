@@ -224,7 +224,8 @@ func like(db *bolt.DB) func(c echo.Context) error {
 		photo.Liked = !photo.Liked
 		photo.save(db)
 
-		return c.Redirect(http.StatusMovedPermanently, "/")
+		photos, _ := List(db, "photos")
+		return c.Render(http.StatusOK, "main", photos)
 	}
 }
 
