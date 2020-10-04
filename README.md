@@ -31,5 +31,5 @@ from Echo framework and updating the view usign jQuery after successfull AJAX ca
 ![arch](images/arch.png)
 
 # How to test flagged/tagged photos?
-After the applicaion is loaded you can just click on the heart button ![heart](heart.png) and then it'll be toggled based the previous state.
+After the applicaion is loaded you can just click on the heart button ![heart](images/heart.png) and then it'll be toggled based the previous state.
 ![test](images/test.png)
