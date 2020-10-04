@@ -4,37 +4,36 @@ import (
 	"fmt"
 	"html/template"
 
-	"github.com/BurntSushi/toml"
+	"github.com/alirezaly/photo-gallery/pkg/config"
+	"github.com/alirezaly/photo-gallery/pkg/http"
+	"github.com/alirezaly/photo-gallery/pkg/storage"
 	"github.com/labstack/echo/v4"
 	"github.com/pkg/errors"
 )
 
-var config struct {
-	Port string `toml:"port"`
-	Host string `toml:"host"`
+func newTemplate() *Template {
+	return &Template{
+		templates: template.Must(template.ParseGlob("public/views/*.html")),
+	}
 }
-
 func main() {
 	e := echo.New()
 
-	_, err := toml.DecodeFile("config.toml", &config)
+	config, err := config.SetupConfig()
 	if err != nil {
-		e.Logger.Fatal(err)
+		e.Logger.Fatal(errors.Wrap(err, "could not set up db"))
 	}
 
-	db, err := setupDB()
+	db, err := storage.SetupDB(config)
 	if err != nil {
 		e.Logger.Fatal(errors.Wrap(err, "could not set up db"))
 	}
 	defer db.Close()
-	seedDB(db)
+	storage.Seed(db)
 
-
-	e.Renderer = &Template{
-		templates: template.Must(template.ParseGlob("public/views/*.html")),
-	}
-	e.GET("/", root(db))
-	e.GET("/like", like(db))
+	e.Renderer = newTemplate()
+	e.GET("/", http.Root(db))
+	e.GET("/like", http.Like(db))
 	e.Static("/assets", "public/assets")
 	e.Logger.Fatal(e.Start(fmt.Sprintf("%s:%s", config.Host, config.Port)))
 

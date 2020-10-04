@@ -1,4 +1,4 @@
-package main
+package storage
 
 import (
 	"encoding/json"
@@ -6,27 +6,11 @@ import (
 
 	"github.com/boltdb/bolt"
 	"github.com/pkg/errors"
+	"github.com/alirezaly/photo-gallery/pkg/config"
 )
 
-func (p *Photo) save(db *bolt.DB) error {
-	err := db.Update(func(tx *bolt.Tx) error {
-		photos, err := tx.CreateBucketIfNotExists([]byte("photos"))
-		if err != nil {
-			return errors.Wrap(err, "could not create photos bucket")
-		}
-		enc, err := p.encode()
-		if err != nil {
-			return errors.Wrap(err, "could not encode photo")
-		}
-
-		err = photos.Put([]byte(p.ID), enc)
-		return err
-	})
-	return err
-}
-
-func setupDB() (*bolt.DB, error) {
-	db, err := bolt.Open("gallery.db", 0600, nil)
+func SetupDB(config *config.Config) (*bolt.DB, error) {
+	db, err := bolt.Open(config.Database, 0600, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "could not open db")
 	}
@@ -45,7 +29,7 @@ func setupDB() (*bolt.DB, error) {
 	return db, nil
 }
 
-func findPhotoByID(db *bolt.DB, id string) (*Photo, error) {
+func FindPhoto(db *bolt.DB, id string) (*Photo, error) {
 	var photo *Photo
 	err := db.View(func(tx *bolt.Tx) error {
 		var err error
@@ -63,8 +47,8 @@ func findPhotoByID(db *bolt.DB, id string) (*Photo, error) {
 	return photo, nil
 }
 
-func seedDB(db *bolt.DB) error {
-	p, _ := listPhotos(db, "photos")
+func Seed(db *bolt.DB) error {
+	p, _ := Photos(db)
 	if len(p) > 1 {
 		return nil
 	}
@@ -83,16 +67,16 @@ func seedDB(db *bolt.DB) error {
 	}
 
 	for _, photo := range photos {
-		photo.save(db)
+		photo.Save(db)
 	}
 
 	return nil
 }
 
-func listPhotos(db *bolt.DB, bucket string) ([]*Photo, error) {
+func Photos(db *bolt.DB) ([]*Photo, error) {
 	var photos []*Photo
 	db.View(func(tx *bolt.Tx) error {
-		c := tx.Bucket([]byte(bucket)).Cursor()
+		c := tx.Bucket([]byte("photos")).Cursor()
 		for k, v := c.First(); k != nil; k, v = c.Next() {
 			photo, _ := decode(v)
 			photos = append(photos, photo)
