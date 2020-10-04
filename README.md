@@ -29,3 +29,7 @@ run `make build` to run the application as a binary or `make run` to temporarly 
 This application provides a kind of simple old-school monolith with that provides server-side rendering
 from Echo framework and updating the view usign jQuery after successfull AJAX calls.
 ![arch](arch.png)
+
+# How to test flagged/tagged photos?
+After the applicaion is loaded you can just click on the heart button ![heart](heart.png) and then it'll be toggled based the previous state.
+![test](test.png)
