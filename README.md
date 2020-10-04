@@ -1,5 +1,5 @@
 # photo-gallery
-![Preview](preview.png)
+![Preview](images/preview.png)
 
 
 # Summary
@@ -21,15 +21,15 @@ for displaying the images I've used CSS Grid and AJAX to make the UI more smooth
 You can either download the zip file or `git clone git@github.com:alirezaly/photo-gallery.git` into your computer then simply
 run `make build` to run the application as a binary or `make run` to temporarly run the applicaion.
 
-![make-build](make-build.png)
-![make-run](make-run.png)
+![make-build](images/make-build.png)
+![make-run](images/make-run.png)
 
 
 # How it works?
 This application provides a kind of simple old-school monolith with that provides server-side rendering
 from Echo framework and updating the view usign jQuery after successfull AJAX calls.
-![arch](arch.png)
+![arch](images/arch.png)
 
 # How to test flagged/tagged photos?
 After the applicaion is loaded you can just click on the heart button ![heart](heart.png) and then it'll be toggled based the previous state.
-![test](test.png)
+![test](images/test.png)
